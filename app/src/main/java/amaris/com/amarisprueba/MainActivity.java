@@ -1,8 +1,8 @@
 package amaris.com.amarisprueba;
 
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -29,12 +29,19 @@ public class MainActivity extends ActionBarActivity {
     private ListView listView;
     private ArrayAdapter<String> adapter;
     private int countLine;
-    public Handler handler = new Handler() {
+    public Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             Log.d("PINTAR", "Acabo de pintar 20");
-            adapter.notifyDataSetChanged();
+            if (msg.what == 100){
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        MainActivity.this.adapter.notifyDataSetChanged();
+                    }
+                });
+            }
         }
     };
 
@@ -46,12 +53,9 @@ public class MainActivity extends ActionBarActivity {
         collection = new ArrayList<>();
         index = new HashMap<>();
 
-        listView = (ListView) findViewById(R.id.listView);
-        adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, collection);
+
 
         // Assign adapter to ListView
-        listView.setAdapter(adapter);
 
         try {
             Log.d("TAG", Arrays.toString(this.getAssets().list("")));
@@ -59,9 +63,15 @@ public class MainActivity extends ActionBarActivity {
             e.printStackTrace();
         }
         Log.d("Index", index.toString());
+        listView = (ListView) findViewById(R.id.listView);
+        adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, android.R.id.text1, collection);
+        listView.setAdapter(adapter);
 
         ReaderText readerText = new ReaderText();
         readerText.run();
+
+
 
 
     }
@@ -98,13 +108,26 @@ public class MainActivity extends ActionBarActivity {
                         String[] tokens = line.split("\\s+");
                         collection.add(line);
 
-                        if (collection.size() == 20) {
+//                        if (collection.size() < 20) {
+//                            Log.d("LINES", "Tengo ya "+collection.size()+" lineas");
+//                            Message message = Message.obtain();
+//                            message.what = 100;
+//                            MainActivity.this.handler.sendMessage(message);
+//                            MainActivity.this.adapter.notifyDataSetChanged();
+//                        } else {
+//                            co
+//                        }
+
+                        if (countLine < 100) {
+                            countLine++;
+                        } else {
                             Log.d("LINES", "Tengo ya "+collection.size()+" lineas");
                             Message message = Message.obtain();
                             message.what = 100;
                             MainActivity.this.handler.sendMessage(message);
+                            MainActivity.this.adapter.notifyDataSetChanged();
+                            countLine = 0;
                         }
-
                         for (String word : tokens) {
 
                             word = word.replaceAll("[^A-Za-z0-9]", "");
