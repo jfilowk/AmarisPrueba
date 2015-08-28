@@ -20,7 +20,10 @@ import java.util.List;
  */
 public class ReaderTextTxt implements Runnable {
 
+    private static final String TAG = ReaderTextTxt.class.getSimpleName();
+
     public static final int KEY_NOTIFY_HANDLER = 100;
+
     public static final String KEY_DATA = "key.data";
     private static final int NUMBER_OF_LINES_TO_NOTIFY = 100;
 
@@ -56,19 +59,19 @@ public class ReaderTextTxt implements Runnable {
 
                     if (!TextUtils.isEmpty(line)) {
                         String[] words = line.split("\\s+");
-                        collection.add(line);
-
-                        if (!haveToNotify()) {
-                            countLine++;
-                        } else {
-                            // Notify 100 new lines UI
-                            notifyNewLines();
-
-                            // Reset counter
-                            countLine = 0;
-                        }
 
                         indexListWords(words);
+
+                        if (collection.size() > words.length) {
+                            int start = collection.size() - words.length;
+                            int end = collection.size();
+
+                            List<String> list = collection.subList(start, end);
+                            notifyNewLines(new ArrayList<>(list));
+
+                        } else {
+                            notifyNewLines(new ArrayList<>(collection));
+                        }
                     }
                 }
 
@@ -85,6 +88,9 @@ public class ReaderTextTxt implements Runnable {
     private void indexListWords(String[] words) {
         for (String word : words) {
             word = word.replaceAll("[^A-Za-z0-9]", "");
+
+            collection.add(word);
+
             if (index.containsKey(word)) {
                 Integer counter = index.get(word);
                 counter++;
@@ -99,11 +105,11 @@ public class ReaderTextTxt implements Runnable {
         return countLine < NUMBER_OF_LINES_TO_NOTIFY;
     }
 
-    private void notifyNewLines() {
+    private void notifyNewLines(ArrayList<String> lines) {
         Message message = Message.obtain();
         message.what = KEY_NOTIFY_HANDLER;
         Bundle bunde = new Bundle();
-        bunde.putStringArrayList(KEY_DATA, (ArrayList<String>) collection);
+        bunde.putStringArrayList(KEY_DATA, lines);
         message.setData(bunde);
 
         handler.sendMessage(message);

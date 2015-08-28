@@ -71,23 +71,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void loadData(ArrayList<String> list) {
-        if (collection != null && collection.size() > 0) {
-            collection.clear();
-        }
-
         collection.addAll(list);
         adapter.notifyDataSetChanged();
-    }
-
-    private List<String> getLines(int numLine) {
-        List<String> lines = new ArrayList<>();
-        int startPosition = numLine;
-        for (int i = 0; i < 20; i++) {
-            startPosition++;
-            lines.add(collection.get(startPosition));
-        }
-
-        return lines;
     }
 
     @Override

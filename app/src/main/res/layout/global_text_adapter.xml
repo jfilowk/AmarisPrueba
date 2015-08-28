@@ -7,6 +7,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/global_text_adapter_txt"/>
+        android:id="@+id/global_text_adapter_txt"
+        android:padding="10dp"/>
 
 </LinearLayout>
