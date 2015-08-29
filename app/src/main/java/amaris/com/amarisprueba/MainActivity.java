@@ -11,8 +11,10 @@ import android.widget.ListView;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import amaris.com.amarisprueba.adapters.IndexAdapter;
 import amaris.com.amarisprueba.adapters.SimpleAdapter;
 import amaris.com.amarisprueba.threads.ReaderTextTxt;
 
@@ -20,9 +22,15 @@ import amaris.com.amarisprueba.threads.ReaderTextTxt;
 public class MainActivity extends ActionBarActivity {
 
     private List<String> collection;
-    private ListView listView;
-    private SimpleAdapter adapter;
+    private HashMap<String, Integer> indexes;
+
+    private SimpleAdapter mAdapterWords;
+    private IndexAdapter mAdapterIndexes;
+
     public Handler handler;
+
+    private ListView mListviewWords;
+    private ListView mListviewIndexes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,16 +47,30 @@ public class MainActivity extends ActionBarActivity {
                 public void handleMessage(final Message msg) {
                     super.handleMessage(msg);
 
-                    if (msg.what == ReaderTextTxt.KEY_NOTIFY_HANDLER) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Bundle data = msg.getData();
-                                ArrayList<String> list = data.getStringArrayList(ReaderTextTxt.KEY_DATA);
+                    switch (msg.what) {
+                        case ReaderTextTxt.KEY_NOTIFY_INDEXES_HANDLER:
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Bundle data = msg.getData();
+                                    HashMap<String, Integer> indexes = (HashMap<String, Integer>) data.getSerializable(ReaderTextTxt.KEY_INDEXES);
 
-                                loadData(list);
-                            }
-                        });
+                                    responseIndexes(indexes);
+                                }
+                            });
+
+                            break;
+                        case ReaderTextTxt.KEY_NOTIFY_WORDS_HANDLER:
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Bundle data = msg.getData();
+                                    ArrayList<String> list = data.getStringArrayList(ReaderTextTxt.KEY_DATA);
+
+                                    loadData(list);
+                                }
+                            });
+                            break;
                     }
                 }
             };
@@ -64,15 +86,31 @@ public class MainActivity extends ActionBarActivity {
 
     private void init() {
         collection = new ArrayList<>();
+        indexes = new HashMap<String, Integer>();
 
-        listView = (ListView) findViewById(R.id.listView);
-        adapter = new SimpleAdapter(this, collection);
-        listView.setAdapter(adapter);
+        mListviewWords = (ListView) findViewById(R.id.activity_main_listview_words);
+        mAdapterWords = new SimpleAdapter(this, collection);
+        mListviewWords.setAdapter(mAdapterWords);
+
+        mListviewIndexes = (ListView) findViewById(R.id.activity_main_listview_indexes);
+
+        mAdapterIndexes = new IndexAdapter(indexes, this);
+        mListviewIndexes.setAdapter(mAdapterIndexes);
+    }
+
+    private void responseIndexes(HashMap<String, Integer> indexes) {
+        for (int index = 0; index < indexes.size(); index++) {
+            String key = (String) indexes.keySet().toArray()[index];
+            this.indexes.put(key, indexes.get(key));
+        }
+
+        mAdapterIndexes.notifyDataSetChanged();
     }
 
     private void loadData(ArrayList<String> list) {
         collection.addAll(list);
-        adapter.notifyDataSetChanged();
+
+        mAdapterWords.notifyDataSetChanged();
     }
 
     @Override

@@ -22,22 +22,26 @@ public class ReaderTextTxt implements Runnable {
 
     private static final String TAG = ReaderTextTxt.class.getSimpleName();
 
-    public static final int KEY_NOTIFY_HANDLER = 100;
+    public static final int KEY_NOTIFY_WORDS_HANDLER = 1000;
+    public static final int KEY_NOTIFY_INDEXES_HANDLER = 1001;
+
+    public static final int NUMBER_OF_CONCURRENTS = 5000;
 
     public static final String KEY_DATA = "key.data";
-    private static final int NUMBER_OF_LINES_TO_NOTIFY = 100;
+    public static final String KEY_INDEXES = "key.indexes";
+
+    private int concurrentCounter = 0;
 
     private InputStream inputStream;
     private List<String> collection;
-    private int countLine;
-    private HashMap<String, Integer> index;
+    private HashMap<String, Integer> indexes;
     private Handler handler;
 
     public ReaderTextTxt(Handler handler, InputStream inputStream) {
         this.handler = handler;
         this.inputStream = inputStream;
 
-        index = new HashMap<>();
+        indexes = new HashMap<>();
         collection = new ArrayList<>();
     }
 
@@ -60,17 +64,22 @@ public class ReaderTextTxt implements Runnable {
                     if (!TextUtils.isEmpty(line)) {
                         String[] words = line.split("\\s+");
 
-                        indexListWords(words);
+                        execute(words);
 
                         if (collection.size() > words.length) {
                             int start = collection.size() - words.length;
                             int end = collection.size();
 
                             List<String> list = collection.subList(start, end);
-                            notifyNewLines(new ArrayList<>(list));
+                            notifyNewWords(new ArrayList<>(list));
 
                         } else {
-                            notifyNewLines(new ArrayList<>(collection));
+                            notifyNewWords(new ArrayList<>(collection));
+                        }
+
+                        if (concurrentCounter >= NUMBER_OF_CONCURRENTS) {
+                            notifyIndexes(indexes);
+                            concurrentCounter = 0;
                         }
                     }
                 }
@@ -83,35 +92,59 @@ public class ReaderTextTxt implements Runnable {
             Log.e("login activity", "Can not read file: " + e.toString());
         }
 
+        notifyIndexes(indexes);
+
+        Log.d(TAG, "Finish");
     }
 
-    private void indexListWords(String[] words) {
+    private void notifyIndexes(HashMap<String, Integer> indexes) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(KEY_INDEXES, indexes);
+
+        Message message = Message.obtain();
+        message.setData(bundle);
+        message.what = KEY_NOTIFY_INDEXES_HANDLER;
+
+        handler.sendMessage(message);
+    }
+
+    private void execute(String[] words) {
         for (String word : words) {
             word = word.replaceAll("[^A-Za-z0-9]", "");
 
             collection.add(word);
 
-            if (index.containsKey(word)) {
-                Integer counter = index.get(word);
-                counter++;
-                index.put(word, counter);
-            } else {
-                index.put(word, 0);
-            }
+            indexWord(word);
         }
     }
 
-    private boolean haveToNotify() {
-        return countLine < NUMBER_OF_LINES_TO_NOTIFY;
+    private void indexWord(String word) {
+        //Ignore case sensitive
+        //TODO: Improve to check all letters.
+        word = capitalize(word);
+        if (indexes.containsKey(word)) {
+            Integer counter = indexes.get(word);
+            counter++;
+            indexes.put(word, counter);
+
+            concurrentCounter++;
+
+        } else {
+            indexes.put(word, 0);
+        }
     }
 
-    private void notifyNewLines(ArrayList<String> lines) {
+    private void notifyNewWords(ArrayList<String> lines) {
         Message message = Message.obtain();
-        message.what = KEY_NOTIFY_HANDLER;
+        message.what = KEY_NOTIFY_WORDS_HANDLER;
         Bundle bunde = new Bundle();
         bunde.putStringArrayList(KEY_DATA, lines);
         message.setData(bunde);
 
         handler.sendMessage(message);
+    }
+
+    private String capitalize(final String line) {
+        return Character.toUpperCase(line.charAt(0)) + line.substring(1);
     }
 }
