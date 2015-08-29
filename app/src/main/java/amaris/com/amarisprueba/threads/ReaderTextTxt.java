@@ -134,7 +134,7 @@ public class ReaderTextTxt implements Runnable {
             repeatedWordCounter++;
 
         } else {
-            indexes.put(word, 0);
+            indexes.put(word, 1);
         }
     }
 

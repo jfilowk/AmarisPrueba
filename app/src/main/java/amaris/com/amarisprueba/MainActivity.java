@@ -38,9 +38,10 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         init();
+        String filename = getIntent().getStringExtra(MenuActivity.KEY_FILENAME);
 
         try {
-            InputStream inputStream = getApplicationContext().getAssets().open("lorem.txt");
+            InputStream inputStream = getApplicationContext().getAssets().open(filename);
 
             handler = new Handler() {
                 @Override
