@@ -1,6 +1,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+    <item
+        android:id="@+id/action_sort"
+        android:orderInCategory="100"
+        android:title="Sort"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/action_sort_alpha"
+                android:orderInCategory="100"
+                android:title="Alphabetical"
+                app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/action_sort_frequency"
+                android:orderInCategory="100"
+                android:title="Frequency"
+                app:showAsAction="ifRoom" />
+        </menu>
+    </item>
 </menu>

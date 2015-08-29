@@ -98,9 +98,9 @@ public class ReaderTextTxt implements Runnable {
 
         endTime = System.nanoTime();
         duration = endTime - startTime;
+        notifyIndexes(indexes);
         notifyTime(duration);
 
-        notifyIndexes(indexes);
     }
 
     private void notifyTime(long duration) {

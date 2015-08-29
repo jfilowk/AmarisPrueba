@@ -1,15 +1,20 @@
 package amaris.com.amarisprueba;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
+import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -27,13 +32,15 @@ public class ReaderTxtActivity extends BaseActivity {
     private List<String> collection;
     private HashMap<String, Integer> indexes;
 
-    private WordAdapter mAdapterWords;
-    private IndexAdapter mAdapterIndexes;
+    private WordAdapter adapterWords;
+    private IndexAdapter adapterIndexes;
 
     private ListView mListviewWords;
     private ListView mListviewIndexes;
 
     private TextApi textApi;
+
+    private boolean isReady = false;
 
     public Handler handler = new Handler() {
         @Override
@@ -70,7 +77,10 @@ public class ReaderTxtActivity extends BaseActivity {
                         public void run() {
                             Bundle data = msg.getData();
                             long duration = data.getLong(ReaderTextTxt.KEY_DURATION);
+
                             showToast(duration);
+
+                            isReady = true;
                         }
                     });
             }
@@ -85,7 +95,6 @@ public class ReaderTxtActivity extends BaseActivity {
 
     }
 
-
     private void init() {
 
         collection = new ArrayList<>();
@@ -94,13 +103,13 @@ public class ReaderTxtActivity extends BaseActivity {
         textApi = new TextApiImpl();
 
         mListviewWords = (ListView) findViewById(R.id.activity_main_listview_words);
-        mAdapterWords = new WordAdapter(this, collection);
-        mListviewWords.setAdapter(mAdapterWords);
+        adapterWords = new WordAdapter(this, collection);
+        mListviewWords.setAdapter(adapterWords);
 
         mListviewIndexes = (ListView) findViewById(R.id.activity_main_listview_indexes);
 
-        mAdapterIndexes = new IndexAdapter(indexes, this);
-        mListviewIndexes.setAdapter(mAdapterIndexes);
+        adapterIndexes = new IndexAdapter(indexes, this);
+        mListviewIndexes.setAdapter(adapterIndexes);
 
         String source = getIntent().getStringExtra(MenuActivity.KEY_SOURCE);
         executeTextReader(source);
@@ -175,13 +184,31 @@ public class ReaderTxtActivity extends BaseActivity {
             this.indexes.put(key, indexes.get(key));
         }
 
-        mAdapterIndexes.notifyDataSetChanged();
+        adapterIndexes.notifyDataSetChanged();
     }
 
     private void loadData(ArrayList<String> list) {
         collection.addAll(list);
 
-        mAdapterWords.notifyDataSetChanged();
+        adapterWords.notifyDataSetChanged();
+    }
+
+
+    private void sortCollectionAlphabetically() {
+        Collections.sort(collection, String.CASE_INSENSITIVE_ORDER);
+        adapterWords.notifyDataSetChanged();
+    }
+
+    private void sortCollectionFrequency (){
+        List<String> list = new ArrayList<String>(indexes.keySet());
+        Collections.sort(list, new Comparator<String>() {
+            @Override
+            public int compare(String x, String y) {
+                return indexes.get(y) - indexes.get(x);
+            }
+        });
+        collection = list;
+        adapterWords.notifyDataSetChanged();
     }
 
     private void showToast(long duration) {
@@ -189,4 +216,35 @@ public class ReaderTxtActivity extends BaseActivity {
                 + " seconds", Toast.LENGTH_LONG).show();
     }
 
+    private void showDialogNotReady() {
+        AlertDialog alertDialog = new AlertDialog.Builder(ReaderTxtActivity.this).create();
+        alertDialog.setTitle("Reading file...");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+
+        if(itemId == R.id.action_sort_alpha){
+            if (isReady) {
+                sortCollectionAlphabetically();
+            } else {
+                showDialogNotReady();
+            }
+        } else if (itemId == R.id.action_sort_frequency){
+            if(isReady){
+                sortCollectionFrequency();
+            } else {
+                showDialogNotReady();
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
