@@ -4,12 +4,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import amaris.com.amarisprueba.adapters.IndexAdapter;
 import amaris.com.amarisprueba.adapters.WordAdapter;
@@ -56,6 +58,15 @@ public class MainActivity extends BaseActivity {
                         }
                     });
                     break;
+                case ReaderTextTxt.KEY_NOTIFY_DURATION_HANDLER:
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Bundle data = msg.getData();
+                            long duration = data.getLong(ReaderTextTxt.KEY_DURATION);
+                            showToast(duration);
+                        }
+                    });
             }
         }
     };
@@ -67,6 +78,11 @@ public class MainActivity extends BaseActivity {
 
         init();
 
+    }
+
+    private void showToast(long duration) {
+        Toast.makeText(this, "Solution Time : " + TimeUnit.SECONDS.convert(duration, TimeUnit.NANOSECONDS)
+                + " seconds", Toast.LENGTH_LONG).show();
     }
 
     private void executeTextReader(String filename) {
