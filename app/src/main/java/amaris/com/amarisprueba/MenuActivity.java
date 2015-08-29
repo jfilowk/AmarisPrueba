@@ -48,7 +48,7 @@ public class MenuActivity extends AppCompatActivity {
 
     @OnClick(R.id.btnSmallFile)
     public void readSmallFile (){
-        Intent i = new Intent(this, MainActivity.class);
+        Intent i = new Intent(this, ReaderTxtActivity.class);
         i.putExtra(KEY_FILENAME, LOREM_SMALL_TXT);
         startActivity(i);
         Log.d("SMALL FILE", "He pulsado small");
@@ -56,7 +56,7 @@ public class MenuActivity extends AppCompatActivity {
 
     @OnClick(R.id.btnBigFile)
     public void readBigFile (){
-        Intent i = new Intent(this, MainActivity.class);
+        Intent i = new Intent(this, ReaderTxtActivity.class);
         i.putExtra(KEY_FILENAME, LOREM_BIG_TXT);
         startActivity(i);
         Log.d("SMALL FILE", "He pulsado small");

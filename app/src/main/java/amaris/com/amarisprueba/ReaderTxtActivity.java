@@ -18,7 +18,7 @@ import amaris.com.amarisprueba.adapters.WordAdapter;
 import amaris.com.amarisprueba.threads.ReaderTextTxt;
 
 
-public class MainActivity extends BaseActivity {
+public class ReaderTxtActivity extends BaseActivity {
 
     private List<String> collection;
     private HashMap<String, Integer> indexes;
