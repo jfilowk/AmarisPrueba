@@ -25,12 +25,15 @@ public class ReaderTextTxt implements Runnable {
     public static final int KEY_NOTIFY_WORDS_HANDLER = 1000;
     public static final int KEY_NOTIFY_INDEXES_HANDLER = 1001;
 
-    public static final int NUMBER_OF_CONCURRENTS = 5000;
+    public static final int NUMBER_OF_REPEATED_WORDS = 5000;
 
     public static final String KEY_DATA = "key.data";
     public static final String KEY_INDEXES = "key.indexes";
 
-    private int concurrentCounter = 0;
+    private int repeatedWordCounter = 0;
+    private long startTime;
+    private long endTime;
+    private long duration;
 
     private InputStream inputStream;
     private List<String> collection;
@@ -46,12 +49,12 @@ public class ReaderTextTxt implements Runnable {
     }
 
     public ReaderTextTxt() {
-        throw new IllegalStateException("Must be call to another constructor");
+        throw new IllegalStateException("Must be call from parameters constructor");
     }
 
     @Override
     public void run() {
-
+        startTime = System.nanoTime();
         try {
 
             if (inputStream != null) {
@@ -77,9 +80,9 @@ public class ReaderTextTxt implements Runnable {
                             notifyNewWords(new ArrayList<>(collection));
                         }
 
-                        if (concurrentCounter >= NUMBER_OF_CONCURRENTS) {
+                        if (repeatedWordCounter >= NUMBER_OF_REPEATED_WORDS) {
                             notifyIndexes(indexes);
-                            concurrentCounter = 0;
+                            repeatedWordCounter = 0;
                         }
                     }
                 }
@@ -93,8 +96,9 @@ public class ReaderTextTxt implements Runnable {
         }
 
         notifyIndexes(indexes);
-
-        Log.d(TAG, "Finish");
+        endTime = System.nanoTime();
+        duration = endTime - startTime;
+        Log.d("EXECUTION TIME", "solution Time : " + duration / 1000000000.0 + " Seconds");
     }
 
     private void notifyIndexes(HashMap<String, Integer> indexes) {
@@ -127,7 +131,7 @@ public class ReaderTextTxt implements Runnable {
             counter++;
             indexes.put(word, counter);
 
-            concurrentCounter++;
+            repeatedWordCounter++;
 
         } else {
             indexes.put(word, 0);
