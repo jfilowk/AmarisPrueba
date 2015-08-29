@@ -38,18 +38,33 @@ public class IndexAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View rootView = LayoutInflater.from(context).inflate(R.layout.global_text_indexes_adapter, parent, false);
 
+        View rootView = convertView;
+        ViewHolder viewHolder;
 
-        TextView txtWord = (TextView) rootView.findViewById(R.id.global_text_indexes_adapter_word);
-        TextView txtOccurends = (TextView) rootView.findViewById(R.id.global_text_indexes_adapter_index);
+        if(rootView == null) {
+            rootView = LayoutInflater.from(context).inflate(R.layout.global_text_indexes_adapter, parent, false);
+
+            viewHolder = new ViewHolder();
+            viewHolder.txtWord = (TextView) rootView.findViewById(R.id.global_text_indexes_adapter_word);
+            viewHolder.txtRepeated = (TextView) rootView.findViewById(R.id.global_text_indexes_adapter_index);
+
+            rootView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) rootView.getTag();
+        }
 
         String key = (String) indexes.keySet().toArray()[position];
         Integer value = indexes.get(key);
 
-        txtOccurends.setText(String.valueOf(value));
-        txtWord.setText(key);
+        viewHolder.txtRepeated.setText(String.valueOf(value));
+        viewHolder.txtWord.setText(key);
 
         return rootView;
+    }
+
+    static class ViewHolder {
+        TextView txtWord;
+        TextView txtRepeated;
     }
 }

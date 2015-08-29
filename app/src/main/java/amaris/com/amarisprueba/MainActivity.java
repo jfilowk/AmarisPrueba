@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import amaris.com.amarisprueba.adapters.IndexAdapter;
-import amaris.com.amarisprueba.adapters.SimpleAdapter;
+import amaris.com.amarisprueba.adapters.WordAdapter;
 import amaris.com.amarisprueba.threads.ReaderTextTxt;
 
 
@@ -24,7 +24,7 @@ public class MainActivity extends ActionBarActivity {
     private List<String> collection;
     private HashMap<String, Integer> indexes;
 
-    private SimpleAdapter mAdapterWords;
+    private WordAdapter mAdapterWords;
     private IndexAdapter mAdapterIndexes;
 
     public Handler handler;
@@ -89,7 +89,7 @@ public class MainActivity extends ActionBarActivity {
         indexes = new HashMap<String, Integer>();
 
         mListviewWords = (ListView) findViewById(R.id.activity_main_listview_words);
-        mAdapterWords = new SimpleAdapter(this, collection);
+        mAdapterWords = new WordAdapter(this, collection);
         mListviewWords.setAdapter(mAdapterWords);
 
         mListviewIndexes = (ListView) findViewById(R.id.activity_main_listview_indexes);

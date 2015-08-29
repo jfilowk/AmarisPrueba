@@ -11,12 +11,12 @@ import java.util.List;
 
 import amaris.com.amarisprueba.R;
 
-public class SimpleAdapter extends BaseAdapter {
+public class WordAdapter extends BaseAdapter {
 
     private List<String> collection;
     private Context context;
 
-    public SimpleAdapter(Context context, List<String> collection) {
+    public WordAdapter(Context context, List<String> collection) {
         this.collection = collection;
         this.context = context;
     }
@@ -38,14 +38,28 @@ public class SimpleAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View rootView = LayoutInflater.from(context).inflate(R.layout.global_text_adapter, parent, false);
 
+        ViewHolder holder;
+        View rootView = convertView;
 
-        TextView textTitle = (TextView) rootView.findViewById(R.id.global_text_adapter_txt);
+        if(rootView == null) {
+            rootView = LayoutInflater.from(context).inflate(R.layout.global_text_adapter, parent, false);
+
+            holder = new ViewHolder();
+            holder.textWord = (TextView) rootView.findViewById(R.id.global_text_adapter_txt);
+
+            rootView.setTag(holder);
+        } else {
+            holder = (ViewHolder) rootView.getTag();
+        }
 
         String line = getItem(position);
-        textTitle.setText(line);
+        holder.textWord.setText(line);
 
         return rootView;
+    }
+
+    static class ViewHolder {
+        TextView textWord;
     }
 }
