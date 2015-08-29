@@ -2,7 +2,7 @@ package amaris.com.amarisprueba;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,7 +15,7 @@ import butterknife.OnClick;
 /**
  * Created by Javi on 29/08/15.
  */
-public class MenuActivity extends ActionBarActivity {
+public class MenuActivity extends AppCompatActivity {
 
     public static final String KEY_FILENAME = "filename";
     public static final String LOREM_SMALL_TXT = "loremSmall.txt";
@@ -25,17 +25,24 @@ public class MenuActivity extends ActionBarActivity {
     @Bind(R.id.btnSmallHttp) TextView btnSmallHttp;
     @Bind(R.id.btnBigHttp) TextView btnBigHttp;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         ButterKnife.bind(this);
 
+        init();
+
         //TODO: Create method to check files
 
         //TODO: Create URL Parser
         //TODO: Create maybe JSON
 
+
+    }
+
+    private void init() {
 
     }
 

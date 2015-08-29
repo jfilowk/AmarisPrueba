@@ -123,8 +123,6 @@ public class ReaderTextTxt implements Runnable {
     }
 
     private void indexWord(String word) {
-        //Ignore case sensitive
-        //TODO: Improve to check all letters.
         word = capitalize(word);
         if (indexes.containsKey(word)) {
             Integer counter = indexes.get(word);
