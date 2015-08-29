@@ -20,4 +20,9 @@
                 app:showAsAction="ifRoom" />
         </menu>
     </item>
+    <item
+        android:id="@+id/action_list_reset"
+        android:orderInCategory="101"
+        android:showAsAction="always"
+        android:title="Reset" />
 </menu>

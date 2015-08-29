@@ -31,6 +31,7 @@ public class ReaderTxtActivity extends BaseActivity {
 
     private List<String> collection;
     private HashMap<String, Integer> indexes;
+    private List<String> words;
 
     private WordAdapter adapterWords;
     private IndexAdapter adapterIndexes;
@@ -99,6 +100,7 @@ public class ReaderTxtActivity extends BaseActivity {
 
         collection = new ArrayList<>();
         indexes = new HashMap<String, Integer>();
+        words = new ArrayList<>();
 
         textApi = new TextApiImpl();
 
@@ -122,16 +124,19 @@ public class ReaderTxtActivity extends BaseActivity {
             progressDialog.setIndeterminate(true);
             progressDialog.setMessage("Downloading...");
             progressDialog.show();
-            if (source.equals(MenuActivity.HTTP_SMALL)) {
-                getSmallTextHttp(progressDialog);
-            } else if (source.equals(MenuActivity.HTTP_BIG)) {
-                getBigTextHttp(progressDialog);
-
-            } else {
-                if (progressDialog.isShowing())
-                    progressDialog.dismiss();
-                InputStream in = getApplicationContext().getAssets().open(source);
-                executeReaderTextTxt(in);
+            switch (source) {
+                case MenuActivity.HTTP_SMALL:
+                    getSmallTextHttp(progressDialog);
+                    break;
+                case MenuActivity.HTTP_BIG:
+                    getBigTextHttp(progressDialog);
+                    break;
+                default:
+                    if (progressDialog.isShowing())
+                        progressDialog.dismiss();
+                    InputStream in = getApplicationContext().getAssets().open(source);
+                    executeReaderTextTxt(in);
+                    break;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -183,23 +188,26 @@ public class ReaderTxtActivity extends BaseActivity {
             String key = (String) indexes.keySet().toArray()[index];
             this.indexes.put(key, indexes.get(key));
         }
-
         adapterIndexes.notifyDataSetChanged();
     }
 
     private void loadData(ArrayList<String> list) {
         collection.addAll(list);
-
+        words.addAll(list);
         adapterWords.notifyDataSetChanged();
     }
 
 
     private void sortCollectionAlphabetically() {
+        collection.clear();
+        collection.addAll(words);
         Collections.sort(collection, String.CASE_INSENSITIVE_ORDER);
         adapterWords.notifyDataSetChanged();
     }
 
-    private void sortCollectionFrequency (){
+    private void sortCollectionFrequency() {
+        collection.clear();
+        collection.addAll(words);
         List<String> list = new ArrayList<String>(indexes.keySet());
         Collections.sort(list, new Comparator<String>() {
             @Override
@@ -207,7 +215,8 @@ public class ReaderTxtActivity extends BaseActivity {
                 return indexes.get(y) - indexes.get(x);
             }
         });
-        collection = list;
+        collection.clear();
+        collection.addAll(list);
         adapterWords.notifyDataSetChanged();
     }
 
@@ -232,19 +241,31 @@ public class ReaderTxtActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
 
-        if(itemId == R.id.action_sort_alpha){
+        if (itemId == R.id.action_sort_alpha) {
             if (isReady) {
                 sortCollectionAlphabetically();
             } else {
                 showDialogNotReady();
             }
-        } else if (itemId == R.id.action_sort_frequency){
-            if(isReady){
+        } else if (itemId == R.id.action_sort_frequency) {
+            if (isReady) {
                 sortCollectionFrequency();
+            } else {
+                showDialogNotReady();
+            }
+        } else if (itemId == R.id.action_list_reset) {
+            if (isReady) {
+                resetListWords();
             } else {
                 showDialogNotReady();
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void resetListWords() {
+        collection.clear();
+        collection.addAll(words);
+        adapterWords.notifyDataSetChanged();
     }
 }
