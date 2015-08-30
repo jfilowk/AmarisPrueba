@@ -25,6 +25,7 @@ import amaris.com.amarisprueba.callback.TextCallback;
 import amaris.com.amarisprueba.datasourceApi.TextApi;
 import amaris.com.amarisprueba.datasourceApi.TextApiImpl;
 import amaris.com.amarisprueba.threads.ReaderTextTxt;
+import amaris.com.amarisprueba.threads.SortAlphabetical;
 
 
 public class ReaderTxtActivity extends BaseActivity {
@@ -43,7 +44,7 @@ public class ReaderTxtActivity extends BaseActivity {
 
     private boolean isReady = false;
 
-    public Handler handler = new Handler() {
+    public Handler readerHandler = new Handler() {
         @Override
         public void handleMessage(final Message msg) {
             super.handleMessage(msg);
@@ -84,6 +85,26 @@ public class ReaderTxtActivity extends BaseActivity {
                             isReady = true;
                         }
                     });
+            }
+        }
+    };
+
+    public Handler sorterHandler = new Handler(){
+        @Override
+        public void handleMessage(final Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case SortAlphabetical.KEY_NOTIFY_SORT_ALPHA:
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Bundle data = msg.getData();
+                            ArrayList<String> list = data.getStringArrayList(SortAlphabetical.KEY_DATA);
+
+                            alphabeticalSort(list);
+                        }
+                    });
+                    break;
             }
         }
     };
@@ -177,7 +198,7 @@ public class ReaderTxtActivity extends BaseActivity {
     }
 
     private void executeReaderTextTxt(InputStream inputStream) {
-        ReaderTextTxt readerTextTxt = new ReaderTextTxt(handler, inputStream);
+        ReaderTextTxt readerTextTxt = new ReaderTextTxt(readerHandler, inputStream);
         Thread thread = new Thread(readerTextTxt);
         thread.start();
     }
@@ -199,15 +220,27 @@ public class ReaderTxtActivity extends BaseActivity {
 
 
     private void sortCollectionAlphabetically() {
+        resetOriginalWords();
+        SortAlphabetical sort = new SortAlphabetical(collection, sorterHandler);
+        Thread thread = new Thread(sort);
+        thread.start();
+    }
+
+    private void resetOriginalWords() {
         collection.clear();
         collection.addAll(words);
-        Collections.sort(collection, String.CASE_INSENSITIVE_ORDER);
-        adapterWords.notifyDataSetChanged();
+    }
+
+
+    private void alphabeticalSort(ArrayList<String> list) {
+            collection.clear();
+            collection.addAll(list);
+            adapterWords.notifyDataSetChanged();
+
     }
 
     private void sortCollectionFrequency() {
-        collection.clear();
-        collection.addAll(words);
+        resetOriginalWords();
         List<String> list = new ArrayList<String>(indexes.keySet());
         Collections.sort(list, new Comparator<String>() {
             @Override
@@ -264,8 +297,7 @@ public class ReaderTxtActivity extends BaseActivity {
     }
 
     private void resetListWords() {
-        collection.clear();
-        collection.addAll(words);
+        resetOriginalWords();
         adapterWords.notifyDataSetChanged();
     }
 }

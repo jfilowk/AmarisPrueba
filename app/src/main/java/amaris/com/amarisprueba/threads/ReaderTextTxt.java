@@ -29,7 +29,7 @@ public class ReaderTextTxt implements Runnable {
     public static final int NUMBER_OF_REPEATED_WORDS = 5000;
     public static final String KEY_DATA = "key.data";
     public static final String KEY_INDEXES = "key.indexes";
-    public static final String KEY_DURATION = "KEY_DURATION";
+    public static final String KEY_DURATION = "key.duration";
 
     private int repeatedWordCounter = 0;
     private long startTime;
@@ -55,9 +55,8 @@ public class ReaderTextTxt implements Runnable {
 
     @Override
     public void run() {
-        startTime = System.nanoTime();
         try {
-
+            startTime = System.nanoTime();
             if (inputStream != null) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);

@@ -10,12 +10,12 @@
         <menu>
             <item
                 android:id="@+id/action_sort_alpha"
-                android:orderInCategory="100"
+                android:orderInCategory="70"
                 android:title="Alphabetical"
                 app:showAsAction="ifRoom" />
             <item
                 android:id="@+id/action_sort_frequency"
-                android:orderInCategory="100"
+                android:orderInCategory="70"
                 android:title="Frequency"
                 app:showAsAction="ifRoom" />
         </menu>
