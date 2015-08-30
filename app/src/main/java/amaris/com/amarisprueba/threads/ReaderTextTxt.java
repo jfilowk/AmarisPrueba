@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import amaris.com.amarisprueba.models.Word;
+
 public class ReaderTextTxt implements Runnable {
 
     private static final String TAG = ReaderTextTxt.class.getSimpleName();
@@ -34,7 +36,7 @@ public class ReaderTextTxt implements Runnable {
     private long duration;
 
     private InputStream inputStream;
-    private List<String> collection;
+    private List<Word> words;
     private HashMap<String, Integer> indexes;
     private Handler handler;
 
@@ -43,7 +45,7 @@ public class ReaderTextTxt implements Runnable {
         this.inputStream = inputStream;
 
         indexes = new HashMap<>();
-        collection = new ArrayList<>();
+        words = new ArrayList<>();
     }
 
     public ReaderTextTxt() {
@@ -66,15 +68,15 @@ public class ReaderTextTxt implements Runnable {
 
                         execute(words);
 
-                        if (collection.size() > words.length) {
-                            int start = collection.size() - words.length;
-                            int end = collection.size();
+                        if (this.words.size() > words.length) {
+                            int start = this.words.size() - words.length;
+                            int end = this.words.size();
 
-                            List<String> list = collection.subList(start, end);
-                            notifyNewWords(new ArrayList<>(list));
+                            List<Word> list = this.words.subList(start, end);
+                            notifyNewWords(new ArrayList<Word>(list));
 
                         } else {
-                            notifyNewWords(new ArrayList<>(collection));
+                            notifyNewWords(new ArrayList<>(this.words));
                         }
 
                         if (repeatedWordCounter >= NUMBER_OF_REPEATED_WORDS) {
@@ -124,8 +126,9 @@ public class ReaderTextTxt implements Runnable {
     private void execute(String[] words) {
         for (String word : words) {
             word = word.replaceAll("[^A-Za-z0-9]", "");
-
-            collection.add(word);
+            Word wordO = new Word();
+            wordO.setWord(word);
+            this.words.add(wordO);
 
             indexWord(word);
         }
@@ -145,11 +148,11 @@ public class ReaderTextTxt implements Runnable {
         }
     }
 
-    private void notifyNewWords(ArrayList<String> lines) {
+    private void notifyNewWords(ArrayList<Word> words) {
         Message message = Message.obtain();
         message.what = KEY_NOTIFY_WORDS_HANDLER;
         Bundle bunde = new Bundle();
-        bunde.putStringArrayList(KEY_DATA, lines);
+        bunde.putSerializable(KEY_DATA, words);
         message.setData(bunde);
 
         handler.sendMessage(message);

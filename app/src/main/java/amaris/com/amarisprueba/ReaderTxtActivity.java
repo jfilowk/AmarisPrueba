@@ -24,15 +24,16 @@ import amaris.com.amarisprueba.adapters.WordAdapter;
 import amaris.com.amarisprueba.callback.TextCallback;
 import amaris.com.amarisprueba.datasourceApi.TextApi;
 import amaris.com.amarisprueba.datasourceApi.TextApiImpl;
+import amaris.com.amarisprueba.models.Word;
 import amaris.com.amarisprueba.threads.ReaderTextTxt;
 import amaris.com.amarisprueba.threads.SortAlphabetical;
 
 
 public class ReaderTxtActivity extends BaseActivity {
 
-    private List<String> collection;
+    private List<Word> collection;
     private HashMap<String, Integer> indexes;
-    private List<String> words;
+    private List<Word> words;
 
     private WordAdapter adapterWords;
     private IndexAdapter adapterIndexes;
@@ -67,7 +68,7 @@ public class ReaderTxtActivity extends BaseActivity {
                         @Override
                         public void run() {
                             Bundle data = msg.getData();
-                            ArrayList<String> list = data.getStringArrayList(ReaderTextTxt.KEY_DATA);
+                            ArrayList<Word> list = (ArrayList<Word>) data.getSerializable(ReaderTextTxt.KEY_DATA);
 
                             loadData(list);
                         }
@@ -89,17 +90,17 @@ public class ReaderTxtActivity extends BaseActivity {
         }
     };
 
-    public Handler sorterHandler = new Handler(){
+    public Handler sorterHandler = new Handler() {
         @Override
         public void handleMessage(final Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case SortAlphabetical.KEY_NOTIFY_SORT_ALPHA:
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             Bundle data = msg.getData();
-                            ArrayList<String> list = data.getStringArrayList(SortAlphabetical.KEY_DATA);
+                            ArrayList<Word> list = (ArrayList<Word>) data.getSerializable(SortAlphabetical.KEY_DATA);
 
                             alphabeticalSort(list);
                         }
@@ -212,7 +213,7 @@ public class ReaderTxtActivity extends BaseActivity {
         adapterIndexes.notifyDataSetChanged();
     }
 
-    private void loadData(ArrayList<String> list) {
+    private void loadData(ArrayList<Word> list) {
         collection.addAll(list);
         words.addAll(list);
         adapterWords.notifyDataSetChanged();
@@ -232,10 +233,10 @@ public class ReaderTxtActivity extends BaseActivity {
     }
 
 
-    private void alphabeticalSort(ArrayList<String> list) {
-            collection.clear();
-            collection.addAll(list);
-            adapterWords.notifyDataSetChanged();
+    private void alphabeticalSort(ArrayList<Word> list) {
+        collection.clear();
+        collection.addAll(list);
+        adapterWords.notifyDataSetChanged();
 
     }
 
@@ -248,9 +249,18 @@ public class ReaderTxtActivity extends BaseActivity {
                 return indexes.get(y) - indexes.get(x);
             }
         });
+
         collection.clear();
-        collection.addAll(list);
+        fillWordObjects(list);
         adapterWords.notifyDataSetChanged();
+    }
+
+    private void fillWordObjects(List<String> list) {
+        for (String word : list) {
+            Word wordO = new Word();
+            wordO.setWord(word);
+            collection.add(wordO);
+        }
     }
 
     private void showToast(long duration) {
