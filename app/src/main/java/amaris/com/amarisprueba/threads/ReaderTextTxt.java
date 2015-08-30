@@ -17,6 +17,7 @@ import java.util.List;
 
 import amaris.com.amarisprueba.models.Word;
 
+
 public class ReaderTextTxt implements Runnable {
 
     private static final String TAG = ReaderTextTxt.class.getSimpleName();

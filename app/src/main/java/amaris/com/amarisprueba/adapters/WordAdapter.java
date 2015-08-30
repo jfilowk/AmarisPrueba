@@ -10,15 +10,16 @@ import android.widget.TextView;
 import java.util.List;
 
 import amaris.com.amarisprueba.R;
+import amaris.com.amarisprueba.models.Word;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class WordAdapter extends BaseAdapter {
 
-    private List<String> collection;
+    private List<Word> collection;
     private Context context;
 
-    public WordAdapter(Context context, List<String> collection) {
+    public WordAdapter(Context context, List<Word> collection) {
         this.collection = collection;
         this.context = context;
     }
@@ -29,7 +30,7 @@ public class WordAdapter extends BaseAdapter {
     }
 
     @Override
-    public String getItem(int position) {
+    public Word getItem(int position) {
         return collection.get(position);
     }
 
@@ -52,8 +53,8 @@ public class WordAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
 
-        String line = getItem(position);
-        holder.textWord.setText(line);
+        Word word = getItem(position);
+        holder.textWord.setText(word.getWord());
 
         return view;
     }

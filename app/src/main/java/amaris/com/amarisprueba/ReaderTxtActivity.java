@@ -24,9 +24,9 @@ import amaris.com.amarisprueba.adapters.WordAdapter;
 import amaris.com.amarisprueba.callback.TextCallback;
 import amaris.com.amarisprueba.datasourceApi.TextApi;
 import amaris.com.amarisprueba.datasourceApi.TextApiImpl;
-import amaris.com.amarisprueba.models.Word;
 import amaris.com.amarisprueba.threads.ReaderTextTxt;
 import amaris.com.amarisprueba.threads.SortAlphabetical;
+import amaris.com.amarisprueba.models.Word;
 
 
 public class ReaderTxtActivity extends BaseActivity {

@@ -1,4 +1,4 @@
-package models;
+package amaris.com.amarisprueba.models;
 
 public class Word {
     private String word;
