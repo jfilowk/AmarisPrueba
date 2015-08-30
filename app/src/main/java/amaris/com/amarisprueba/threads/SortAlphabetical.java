@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by Javi on 29/08/15.
- */
 public class SortAlphabetical implements Runnable {
 
     public static final String KEY_DATA = "key.data";

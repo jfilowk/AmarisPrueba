@@ -9,9 +9,6 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-/**
- * Created by Javi on 29/08/15.
- */
 public class TextApiImpl implements TextApi {
     @Override
     public void getSmallText(final TextCallback textCallback) {

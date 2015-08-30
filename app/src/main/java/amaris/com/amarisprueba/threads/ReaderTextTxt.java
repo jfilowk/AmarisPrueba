@@ -15,9 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by Javi on 28/08/15.
- */
 public class ReaderTextTxt implements Runnable {
 
     private static final String TAG = ReaderTextTxt.class.getSimpleName();

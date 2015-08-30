@@ -11,9 +11,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * Created by Javi on 29/08/15.
- */
 public class MenuActivity extends AppCompatActivity {
 
     public static final String KEY_SOURCE = "filename";
