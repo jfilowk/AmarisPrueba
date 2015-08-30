@@ -10,6 +10,8 @@ import android.widget.TextView;
 import java.util.HashMap;
 
 import amaris.com.amarisprueba.R;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class IndexAdapter extends BaseAdapter {
 
@@ -37,34 +39,34 @@ public class IndexAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View view, ViewGroup parent) {
 
-        View rootView = convertView;
         ViewHolder viewHolder;
 
-        if(rootView == null) {
-            rootView = LayoutInflater.from(context).inflate(R.layout.global_text_indexes_adapter, parent, false);
+        if(view == null) {
+            view = LayoutInflater.from(context).inflate(R.layout.global_text_indexes_adapter, parent, false);
 
-            viewHolder = new ViewHolder();
-            viewHolder.txtWord = (TextView) rootView.findViewById(R.id.global_text_indexes_adapter_word);
-            viewHolder.txtRepeated = (TextView) rootView.findViewById(R.id.global_text_indexes_adapter_index);
-
-            rootView.setTag(viewHolder);
+            viewHolder = new ViewHolder(view);
+            view.setTag(viewHolder);
         } else {
-            viewHolder = (ViewHolder) rootView.getTag();
+            viewHolder = (ViewHolder) view.getTag();
         }
 
         String key = (String) indexes.keySet().toArray()[position];
         Integer value = indexes.get(key);
 
-        viewHolder.txtRepeated.setText(String.valueOf(value));
-        viewHolder.txtWord.setText(key);
+        viewHolder.txtWord.setText(String.valueOf(value));
+        viewHolder.txtRepeated.setText(key);
 
-        return rootView;
+        return view;
     }
 
     static class ViewHolder {
-        TextView txtWord;
-        TextView txtRepeated;
+        @Bind(R.id.global_text_indexes_adapter_word) TextView txtWord;
+        @Bind(R.id.global_text_indexes_adapter_index) TextView txtRepeated;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 }

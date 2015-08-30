@@ -10,6 +10,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import amaris.com.amarisprueba.R;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class WordAdapter extends BaseAdapter {
 
@@ -37,29 +39,31 @@ public class WordAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View view, ViewGroup parent) {
 
         ViewHolder holder;
-        View rootView = convertView;
 
-        if(rootView == null) {
-            rootView = LayoutInflater.from(context).inflate(R.layout.global_text_adapter, parent, false);
+        if(view == null) {
+            view = LayoutInflater.from(context).inflate(R.layout.global_text_adapter, parent, false);
 
-            holder = new ViewHolder();
-            holder.textWord = (TextView) rootView.findViewById(R.id.global_text_adapter_txt);
-
-            rootView.setTag(holder);
+            holder = new ViewHolder(view);
+            view.setTag(holder);
         } else {
-            holder = (ViewHolder) rootView.getTag();
+            holder = (ViewHolder) view.getTag();
         }
 
         String line = getItem(position);
         holder.textWord.setText(line);
 
-        return rootView;
+        return view;
     }
 
     static class ViewHolder {
-        TextView textWord;
+        @Bind(R.id.global_text_adapter_txt) TextView textWord;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
+
 }
