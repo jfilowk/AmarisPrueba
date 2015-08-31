@@ -67,14 +67,14 @@ public class ReaderTextTxt implements Runnable {
                     if (!TextUtils.isEmpty(line)) {
                         String[] words = line.split("\\s+");
 
-                        execute(words);
+                        processLine(words);
 
                         if (this.words.size() > words.length) {
                             int start = this.words.size() - words.length;
                             int end = this.words.size();
 
                             List<Word> list = this.words.subList(start, end);
-                            notifyNewWords(new ArrayList<Word>(list));
+                            notifyNewWords(new ArrayList<>(list));
 
                         } else {
                             notifyNewWords(new ArrayList<>(this.words));
@@ -124,7 +124,7 @@ public class ReaderTextTxt implements Runnable {
         handler.sendMessage(message);
     }
 
-    private void execute(String[] words) {
+    private void processLine(String[] words) {
         for (String word : words) {
             word = word.replaceAll("[^A-Za-z0-9]", "");
             Word wordO = new Word();

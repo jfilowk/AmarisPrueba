@@ -27,19 +27,21 @@ import amaris.com.amarisprueba.datasourceApi.TextApiImpl;
 import amaris.com.amarisprueba.threads.ReaderTextTxt;
 import amaris.com.amarisprueba.threads.SortAlphabetical;
 import amaris.com.amarisprueba.models.Word;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 
 public class ReaderTxtActivity extends BaseActivity {
 
     private List<Word> collection;
-    private HashMap<String, Integer> indexes;
     private List<Word> words;
+    private HashMap<String, Integer> indexes;
 
     private WordAdapter adapterWords;
     private IndexAdapter adapterIndexes;
 
-    private ListView mListviewWords;
-    private ListView mListviewIndexes;
+    @Bind(R.id.activity_main_listview_words) ListView listviewWords;
+    @Bind(R.id.activity_main_listview_indexes) ListView listviewIndexes;
 
     private TextApi textApi;
 
@@ -126,14 +128,14 @@ public class ReaderTxtActivity extends BaseActivity {
 
         textApi = new TextApiImpl();
 
-        mListviewWords = (ListView) findViewById(R.id.activity_main_listview_words);
-        adapterWords = new WordAdapter(this, collection);
-        mListviewWords.setAdapter(adapterWords);
+        ButterKnife.bind(this);
 
-        mListviewIndexes = (ListView) findViewById(R.id.activity_main_listview_indexes);
+        adapterWords = new WordAdapter(this, collection);
+        listviewWords.setAdapter(adapterWords);
+
 
         adapterIndexes = new IndexAdapter(indexes, this);
-        mListviewIndexes.setAdapter(adapterIndexes);
+        listviewIndexes.setAdapter(adapterIndexes);
 
         String source = getIntent().getStringExtra(MenuActivity.KEY_SOURCE);
         executeTextReader(source);

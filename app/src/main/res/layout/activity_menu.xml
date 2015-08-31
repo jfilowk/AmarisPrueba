@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtPropertiesSmall"
-        android:text="Nombre archivo"/>
+        android:text="Small File - 4KB"/>
 
     <Button
         android:id="@+id/btnBigFile"
@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtPropertiesBig"
-        android:text="Nombre archivo"/>
+        android:text="Big File - 17MB"/>
 
     <Button
         android:id="@+id/btnSmallHttp"
@@ -38,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtPropertiesSmallHttp"
-        android:text="Nombre archivo"/>
+        android:text="Small File HTTP - 4KB"/>
 
     <Button
         android:id="@+id/btnBigHttp"
@@ -50,6 +50,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtPropertiesBigHttp"
-        android:text="Nombre archivo"/>
+        android:text="Big File HTTP - 17MB"/>
 
 </LinearLayout>
