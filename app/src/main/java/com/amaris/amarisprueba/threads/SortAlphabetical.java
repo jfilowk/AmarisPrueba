@@ -1,4 +1,4 @@
-package amaris.com.amarisprueba.threads;
+package com.amaris.amarisprueba.threads;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import amaris.com.amarisprueba.models.Word;
+import com.amaris.amarisprueba.models.Word;
 
 public class SortAlphabetical implements Runnable {
 

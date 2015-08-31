@@ -1,10 +1,10 @@
-package amaris.com.amarisprueba.datasourceApi;
+package com.amaris.amarisprueba.datasourceApi;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import amaris.com.amarisprueba.callback.TextCallback;
-import amaris.com.amarisprueba.retrofit.ReaderApi;
+import com.amaris.amarisprueba.callback.TextCallback;
+import com.amaris.amarisprueba.retrofit.ReaderApi;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;

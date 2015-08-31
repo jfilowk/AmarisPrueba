@@ -1,4 +1,4 @@
-package amaris.com.amarisprueba.retrofit;
+package com.amaris.amarisprueba.retrofit;
 
 
 import retrofit.Callback;

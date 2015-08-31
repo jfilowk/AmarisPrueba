@@ -1,4 +1,4 @@
-package amaris.com.amarisprueba.callback;
+package com.amaris.amarisprueba.callback;
 
 import java.io.InputStream;
 

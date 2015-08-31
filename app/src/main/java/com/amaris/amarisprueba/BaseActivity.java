@@ -1,4 +1,4 @@
-package amaris.com.amarisprueba;
+package com.amaris.amarisprueba;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

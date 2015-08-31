@@ -1,4 +1,4 @@
-package amaris.com.amarisprueba;
+package com.amaris.amarisprueba;
 
 import android.content.Intent;
 import android.os.Bundle;

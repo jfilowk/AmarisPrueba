@@ -1,4 +1,4 @@
-package amaris.com.amarisprueba;
+package com.amaris.amarisprueba;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -19,14 +19,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import amaris.com.amarisprueba.adapters.IndexAdapter;
-import amaris.com.amarisprueba.adapters.WordAdapter;
-import amaris.com.amarisprueba.callback.TextCallback;
-import amaris.com.amarisprueba.datasourceApi.TextApi;
-import amaris.com.amarisprueba.datasourceApi.TextApiImpl;
-import amaris.com.amarisprueba.threads.ReaderTextTxt;
-import amaris.com.amarisprueba.threads.SortAlphabetical;
-import amaris.com.amarisprueba.models.Word;
+import com.amaris.amarisprueba.adapters.IndexAdapter;
+import com.amaris.amarisprueba.adapters.WordAdapter;
+import com.amaris.amarisprueba.callback.TextCallback;
+import com.amaris.amarisprueba.datasourceApi.TextApi;
+import com.amaris.amarisprueba.datasourceApi.TextApiImpl;
+import com.amaris.amarisprueba.threads.ReaderTextTxt;
+import com.amaris.amarisprueba.threads.SortAlphabetical;
+import com.amaris.amarisprueba.models.Word;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 

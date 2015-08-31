@@ -1,4 +1,4 @@
-package amaris.com.amarisprueba;
+package com.amaris.amarisprueba;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

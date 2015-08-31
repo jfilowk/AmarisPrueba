@@ -1,4 +1,4 @@
-package amaris.com.amarisprueba.adapters;
+package com.amaris.amarisprueba.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 
-import amaris.com.amarisprueba.R;
+import com.amaris.amarisprueba.R;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 

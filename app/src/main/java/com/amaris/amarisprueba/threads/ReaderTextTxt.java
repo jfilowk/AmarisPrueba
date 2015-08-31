@@ -1,4 +1,4 @@
-package amaris.com.amarisprueba.threads;
+package com.amaris.amarisprueba.threads;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import amaris.com.amarisprueba.models.Word;
+import com.amaris.amarisprueba.models.Word;
 
 
 public class ReaderTextTxt implements Runnable {

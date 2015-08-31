@@ -1,6 +1,6 @@
-package amaris.com.amarisprueba.datasourceApi;
+package com.amaris.amarisprueba.datasourceApi;
 
-import amaris.com.amarisprueba.callback.TextCallback;
+import com.amaris.amarisprueba.callback.TextCallback;
 
 public interface TextApi {
     void getSmallText(TextCallback textCallback);

@@ -1,4 +1,4 @@
-package amaris.com.amarisprueba.adapters;
+package com.amaris.amarisprueba.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,10 +7,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.amaris.amarisprueba.R;
+import com.amaris.amarisprueba.models.Word;
+
 import java.util.List;
 
-import amaris.com.amarisprueba.R;
-import amaris.com.amarisprueba.models.Word;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
