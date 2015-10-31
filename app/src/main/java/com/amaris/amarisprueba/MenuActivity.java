@@ -14,8 +14,8 @@ import butterknife.OnClick;
 public class MenuActivity extends AppCompatActivity {
 
     public static final String KEY_SOURCE = "filename";
-    public static final String LOREM_SMALL_TXT = "loremSmall.txt";
-    public static final String LOREM_BIG_TXT = "loremBig.txt";
+    private static final String LOREM_SMALL_TXT = "loremSmall.txt";
+    private static final String LOREM_BIG_TXT = "loremBig.txt";
     public static final String HTTP_SMALL = "httpSmall";
     public static final String HTTP_BIG = "httpBig";
 

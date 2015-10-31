@@ -10,6 +10,15 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.amaris.amarisprueba.adapters.IndexAdapter;
+import com.amaris.amarisprueba.adapters.WordAdapter;
+import com.amaris.amarisprueba.callback.TextCallback;
+import com.amaris.amarisprueba.datasourceApi.TextApi;
+import com.amaris.amarisprueba.datasourceApi.TextApiImpl;
+import com.amaris.amarisprueba.models.Word;
+import com.amaris.amarisprueba.threads.ReaderTextTxt;
+import com.amaris.amarisprueba.threads.SortAlphabetical;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -19,14 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import com.amaris.amarisprueba.adapters.IndexAdapter;
-import com.amaris.amarisprueba.adapters.WordAdapter;
-import com.amaris.amarisprueba.callback.TextCallback;
-import com.amaris.amarisprueba.datasourceApi.TextApi;
-import com.amaris.amarisprueba.datasourceApi.TextApiImpl;
-import com.amaris.amarisprueba.threads.ReaderTextTxt;
-import com.amaris.amarisprueba.threads.SortAlphabetical;
-import com.amaris.amarisprueba.models.Word;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -40,14 +41,16 @@ public class ReaderTxtActivity extends BaseActivity {
     private WordAdapter adapterWords;
     private IndexAdapter adapterIndexes;
 
-    @Bind(R.id.activity_main_listview_words) ListView listviewWords;
-    @Bind(R.id.activity_main_listview_indexes) ListView listviewIndexes;
+    @Bind(R.id.activity_main_listview_words)
+    private ListView listviewWords;
+    @Bind(R.id.activity_main_listview_indexes)
+    private ListView listviewIndexes;
 
     private TextApi textApi;
 
     private boolean isReady = false;
 
-    public Handler readerHandler = new Handler() {
+    private Handler readerHandler = new Handler() {
         @Override
         public void handleMessage(final Message msg) {
             super.handleMessage(msg);
@@ -92,7 +95,7 @@ public class ReaderTxtActivity extends BaseActivity {
         }
     };
 
-    public Handler sorterHandler = new Handler() {
+    private Handler sorterHandler = new Handler() {
         @Override
         public void handleMessage(final Message msg) {
             super.handleMessage(msg);
@@ -123,7 +126,7 @@ public class ReaderTxtActivity extends BaseActivity {
     private void init() {
 
         collection = new ArrayList<>();
-        indexes = new HashMap<String, Integer>();
+        indexes = new HashMap<>();
         words = new ArrayList<>();
 
         textApi = new TextApiImpl();
@@ -244,7 +247,7 @@ public class ReaderTxtActivity extends BaseActivity {
 
     private void sortCollectionFrequency() {
         resetOriginalWords();
-        List<String> list = new ArrayList<String>(indexes.keySet());
+        List<String> list = new ArrayList<>(indexes.keySet());
         Collections.sort(list, new Comparator<String>() {
             @Override
             public int compare(String x, String y) {

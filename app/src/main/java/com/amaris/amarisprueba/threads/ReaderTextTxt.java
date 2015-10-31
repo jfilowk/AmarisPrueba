@@ -6,6 +6,10 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.amaris.amarisprueba.models.Word;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -14,8 +18,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import com.amaris.amarisprueba.models.Word;
 
 
 public class ReaderTextTxt implements Runnable {
@@ -26,15 +28,13 @@ public class ReaderTextTxt implements Runnable {
     public static final int KEY_NOTIFY_INDEXES_HANDLER = 1001;
     public static final int KEY_NOTIFY_DURATION_HANDLER = 1002;
 
-    public static final int NUMBER_OF_REPEATED_WORDS = 5000;
+    private static final int NUMBER_OF_REPEATED_WORDS = 1500;
     public static final String KEY_DATA = "key.data";
     public static final String KEY_INDEXES = "key.indexes";
     public static final String KEY_DURATION = "key.duration";
 
     private int repeatedWordCounter = 0;
     private long startTime;
-    private long endTime;
-    private long duration;
 
     private InputStream inputStream;
     private List<Word> words;
@@ -49,7 +49,7 @@ public class ReaderTextTxt implements Runnable {
         words = new ArrayList<>();
     }
 
-    public ReaderTextTxt() {
+    private ReaderTextTxt() {
         throw new IllegalStateException("Must be call from parameters constructor");
     }
 
@@ -61,16 +61,17 @@ public class ReaderTextTxt implements Runnable {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                 String line;
+
                 while ((line = bufferedReader.readLine()) != null) {
                     // \\s+ means any number of whitespaces between tokens
-
                     if (!TextUtils.isEmpty(line)) {
-                        String[] words = line.split("\\s+");
-
+                        line = line.replaceAll("[^A-Za-z0-9 ]", "");
+                        Iterable<String> wordsIte = Splitter.on(" ").split(line);
+                        List<String> words = Lists.newArrayList(wordsIte.iterator());
                         processLine(words);
 
-                        if (this.words.size() > words.length) {
-                            int start = this.words.size() - words.length;
+                        if (this.words.size() > words.size()) {
+                            int start = this.words.size() - words.size();
                             int end = this.words.size();
 
                             List<Word> list = this.words.subList(start, end);
@@ -95,8 +96,8 @@ public class ReaderTextTxt implements Runnable {
             Log.e("login activity", "Can not read file: " + e.toString());
         }
 
-        endTime = System.nanoTime();
-        duration = endTime - startTime;
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
         notifyIndexes(indexes);
         notifyTime(duration);
 
@@ -124,13 +125,12 @@ public class ReaderTextTxt implements Runnable {
         handler.sendMessage(message);
     }
 
-    private void processLine(String[] words) {
+    private void processLine(List<String> words) {
         for (String word : words) {
-            word = word.replaceAll("[^A-Za-z0-9]", "");
+
             Word wordO = new Word();
             wordO.setWord(word);
             this.words.add(wordO);
-
             indexWord(word);
         }
     }

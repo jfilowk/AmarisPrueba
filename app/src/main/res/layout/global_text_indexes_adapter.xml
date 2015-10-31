@@ -9,14 +9,14 @@
         android:id="@+id/global_text_indexes_adapter_word"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="left"
+        android:gravity="start"
         android:layout_weight="1"/>
 
     <TextView
         android:id="@+id/global_text_indexes_adapter_index"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="right"
+        android:gravity="end"
         android:layout_weight="0.5"/>
 
 </LinearLayout>
